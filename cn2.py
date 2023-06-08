@@ -1,4 +1,7 @@
 class CN2:
+    def __init__(self, dataset, m):
+        self.dataset = dataset
+        self.m = m
     def process(self, classified_examples):
         rules = []
         best_cpx = None  # TODO

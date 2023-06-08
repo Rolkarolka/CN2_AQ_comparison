@@ -11,6 +11,7 @@ if __name__ == "__main__":
     valSplit = 0.15
     trainSplit = 0.8
     nexecutions = 1
+    m = 10
 
     # podział zbioru na treningowy/walidacyjny i testowy
     ds = DataSet(dataset)
@@ -28,9 +29,9 @@ if __name__ == "__main__":
     sensitivity = 0
     for _ in range(nexecutions):
         if model == "AQ":
-            algorithm = AQ(T = train_dataset, m = 10)
+            algorithm = AQ(T=train_dataset, m=m)
         else:
-            algorithm = CN2()
+            algorithm = CN2(dataset=train_dataset, m=m)
         print(algorithm.getHighestQualityComplex())
         bestComplex, acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
