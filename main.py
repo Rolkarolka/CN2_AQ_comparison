@@ -4,6 +4,13 @@ from AQ import AQ
 import random
 import copy
 
+
+def format_rules(rules):
+    for rule, common_class in rules:
+        rule_str = str(list(rule))
+        print(f"Rule: {rule_str:50} Class: {common_class[0]:10} Covered: {common_class[1]}")
+
+
 if __name__ == "__main__":
     dataset = "./datasets/car.data"
     model = "CN2"
@@ -31,10 +38,12 @@ if __name__ == "__main__":
     for _ in range(nexecutions):
         if model == "AQ":
             algorithm = AQ(T=train_dataset, m=m)
+            rules = algorithm.process()
         else:
             algorithm = CN2(dataset=train_dataset)
-        print(algorithm.process())
-        bestComplex, acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
+            rules = algorithm.process()
+            format_rules(rules)
+        acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
         if prec:
             precision += prec

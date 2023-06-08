@@ -19,7 +19,7 @@ class CN2:
                 covered_examples = self.get_covered(best_cpx, classified_examples)
                 classified_examples = [element for element in classified_examples if element not in covered_examples]
                 common_class = self.get_most_common_class(covered_examples)
-                rules += (best_cpx, common_class)
+                rules += [(best_cpx, common_class)]
         return rules
 
     def find_best_complex(self, classified_examples):
@@ -99,11 +99,10 @@ class CN2:
             selectors += [(i, attr_val) for attr_val in attr_values]
         return selectors
 
-    def get_best_complex_with_measures(self, dataset):
-        return None, 1, 1, 1, 1
-
     def get_most_common_class(self, covered_examples):
         covered_classes = self.get_covered_classes(covered_examples)
         most_common = sorted(covered_classes.items(), reverse=True, key=lambda x: x[1])[0]
         return most_common
 
+    def get_best_complex_with_measures(self, dataset):
+        return 1,1,1,1 # TODO implement

@@ -140,8 +140,7 @@ class AQ:
         print("Precyzja: ", prec)
         print("Swoistość: ", spec)
         print("Czułość: ", sens)
-        print("Najlepszy kompleks: ", self.bestComplex)
-        return self.bestComplex, acc, prec, spec, sens
+        return acc, prec, spec, sens
 
     def _v(self, complex):
         """
@@ -159,8 +158,6 @@ class AQ:
         if v > self.bestV:
             self.bestV = v
             self.bestComplex = complex
-
-        print("Dokładność: ", v / len(self.R))
         return v
 
     def _get_max_quality_complexes(self, m):
