@@ -6,7 +6,7 @@ import copy
 
 if __name__ == "__main__":
     dataset = "./datasets/car.data"
-    model = "AQ"
+    model = "CN2"
 
     valSplit = 0.15
     trainSplit = 0.8
@@ -15,6 +15,7 @@ if __name__ == "__main__":
 
     # podział zbioru na treningowy/walidacyjny i testowy
     ds = DataSet(dataset)
+    ds.get_set_with_known_attributes()
     temp_ds = copy.deepcopy(ds)
     random.shuffle(temp_ds)
     length = len(temp_ds)
@@ -31,8 +32,8 @@ if __name__ == "__main__":
         if model == "AQ":
             algorithm = AQ(T=train_dataset, m=m)
         else:
-            algorithm = CN2(dataset=train_dataset, m=m)
-        print(algorithm.getHighestQualityComplex())
+            algorithm = CN2(dataset=train_dataset)
+        print(algorithm.get_highest_quality_complex())
         bestComplex, acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
         if prec:

@@ -15,6 +15,13 @@ class DataSet:
                 attributes = [row[i] for i in range(0, len(row) - 1)]
                 self.dataSet.append({"attributes": copy.deepcopy(attributes), "class": row[-1]})
 
+    def get_set_with_known_attributes(self):
+        new_dataset = []
+        for record in self.dataSet:
+            if not ("?" in record["attributes"]):
+                new_dataset.append(record)
+        self.dataSet = new_dataset
+
     def __getitem__(self, key):
         return self.dataSet[key]
 

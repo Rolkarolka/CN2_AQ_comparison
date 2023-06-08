@@ -47,7 +47,7 @@ class AQ:
                 r_0.append(copy.deepcopy(example))
         return r_1, r_0
 
-    def getHighestQualityComplex(self):
+    def get_highest_quality_complex(self):
         """
         Główna pętla algorytmu. Wyznacza najlepszej jakości regułę decyzją w oparciu o dostarczony zbiór danych.
         """
