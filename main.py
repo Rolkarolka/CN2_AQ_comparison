@@ -5,7 +5,7 @@ import random
 import copy
 
 if __name__ == "__main__":
-    dataset = "./datasets/car.data"
+    dataset = "./datasets/car-evaluation/car.data"
     model = "AQ"
 
     valSplit = 0.15
