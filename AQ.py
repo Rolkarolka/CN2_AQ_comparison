@@ -141,6 +141,7 @@ class AQ:
         print("Swoistość: ", spec)
         print("Czułość: ", sens)
         return acc, prec, spec, sens
+    # TODO metryki dla klasyfikacji wieloklasowej
 
     def _v(self, complex):
         """

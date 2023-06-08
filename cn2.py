@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 
+
 class CN2:
     def __init__(self, dataset, min_significance=0.4, max_size_star=3):
         self.dataset = dataset
@@ -28,35 +29,39 @@ class CN2:
         best_cpx_quality = float('inf')
         while len(star) != 0:
             new_star = self.specialize_star(star)
-            star_complex_quality = {}
-            for complex in new_star:
-                complex_significance = self.count_significance(complex, classified_examples)
-                if complex_significance > self.min_significance:
-                    complex_quality = self.count_entropy(complex, classified_examples)
-                    star_complex_quality[complex] = complex_quality
-                    if complex_quality < best_cpx_quality:
-                        best_cpx_quality = complex_quality
-                        best_cpx = complex
-            good_cpxs = sorted(star_complex_quality.items(), key=lambda x: x[1])[:self.max_size_star]
-            star = {complex for complex, quality in good_cpxs}
+            star_cpx_quality = {}
+            for cpx in new_star:
+                cpx_significance = self.count_significance(cpx, classified_examples)
+
+                if cpx_significance > self.min_significance:
+                    cpx_quality = self.count_entropy(cpx, classified_examples)
+                    star_cpx_quality[cpx] = cpx_quality
+                    if cpx_quality < best_cpx_quality:
+                        best_cpx_quality = cpx_quality
+                        best_cpx = cpx
+            good_cpxs = sorted(star_cpx_quality.items(), key=lambda x: x[1])[:self.max_size_star]
+            star = {cpx for cpx, quality in good_cpxs}
         return best_cpx
 
-    def count_significance(self, complex, classified_examples):
-        covered_examples = self.get_covered(complex, classified_examples)
+    def count_significance(self, cpx, classified_examples):
+        covered_examples = self.get_covered(cpx, classified_examples)
         if covered_examples:
-            covered_probs = {key: value/len(covered_examples) for key, value in self.get_covered_classes(covered_examples).items()}
-            classified_probs = {key: value/len(classified_examples) for key, value in self.get_covered_classes(classified_examples).items()}
+            covered_probs = {key: value / len(covered_examples) for key, value in
+                             self.get_covered_classes(covered_examples).items()}
+            classified_probs = {key: value / len(classified_examples) for key, value in
+                                self.get_covered_classes(classified_examples).items()}
             significance = 0
             for key in self.classes:
                 if covered_probs[key] != 0.0:
-                    significance += covered_probs[key] * np.log(covered_probs[key]/classified_probs[key])
+                    significance += covered_probs[key] * np.log(covered_probs[key] / classified_probs[key])
             return significance * 2
         else:
             return 0
 
-    def count_entropy(self, complex, classified_examples):
-        covered_examples = self.get_covered(complex, classified_examples)
-        covered_probs = {key: value / len(covered_examples) for key, value in self.get_covered_classes(covered_examples).items()}
+    def count_entropy(self, cpx, classified_examples):
+        covered_examples = self.get_covered(cpx, classified_examples)
+        covered_probs = {key: value / len(covered_examples) for key, value in
+                         self.get_covered_classes(covered_examples).items()}
         entropy = 0
         for key in self.classes:
             if covered_probs[key] != 0.0:
@@ -69,27 +74,29 @@ class CN2:
             covered_classes[example["class"]] += 1
         return covered_classes
 
-    def get_covered(self, complex, classified_examples):
-        return [example for example in classified_examples if all([example["attributes"][attr[0]] == attr[1] for attr in complex])]
+    def get_covered(self, cpx, classified_examples):
+        return [example for example in classified_examples if
+                all([example["attributes"][attr[0]] == attr[1] for attr in cpx])]
 
     def specialize_star(self, star):
         new_star = set()
         if star:
-            for complex in star:
+            for cpx in star:
                 # odfitrowanie, żeby nie powstawał kompleks typu [(0, "1"), (0, "2")]
-                complex_attr_class = [attr[0] for attr in complex]
-                new_attr_selectors = list(filter(lambda attr: not (attr[0] in complex_attr_class), self.selectors))
+                cpx_attr_class = [attr[0] for attr in cpx]
+                new_attr_selectors = list(filter(lambda attr: not (attr[0] in cpx_attr_class), self.selectors))
                 for selector in new_attr_selectors:
                     # frozenset sortuje, żeby nie powstawał kompleksy typu [[(0, "1"), (1, "x")],  [(1, "x"), (0, "1")]]
-                    new_complex = list(complex) + [selector]
-                    new_star.add(frozenset(new_complex))
+                    new_cpx = list(cpx) + [selector]
+                    new_star.add(frozenset(new_cpx))
         else:
             for selector in self.selectors:
                 new_star.add(frozenset([selector]))
         return new_star
 
     def _get_all_attributes(self):
-        possible_values = [set() for i in range(len(self.dataset[0]['attributes']))]
+        # TODO komentarze o funkcjach
+        possible_values = [set() for _ in range(len(self.dataset[0]['attributes']))]
         for example in self.dataset:
             for i, attr in enumerate(example["attributes"]):
                 possible_values[i].add(attr)
@@ -104,5 +111,5 @@ class CN2:
         most_common = sorted(covered_classes.items(), reverse=True, key=lambda x: x[1])[0]
         return most_common
 
-    def get_best_complex_with_measures(self, dataset):
-        return 1,1,1,1 # TODO implement
+    def get_best_cpx_with_measures(self, dataset):
+        return 1, 1, 1, 1  # TODO implement

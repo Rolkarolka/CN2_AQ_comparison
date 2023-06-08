@@ -41,7 +41,7 @@ if __name__ == "__main__":
             rules = algorithm.process()
         else:
             algorithm = CN2(dataset=train_dataset)
-            rules = algorithm.process()
+            rules = algorithm.process() # TODO zapisywanie do pliku
             format_rules(rules)
         acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
