@@ -1,9 +1,10 @@
 import copy
 
+
 class Complex:
     def __init__(self, allAttributes):
         self.complex = allAttributes
-    
+
     def __getitem__(self, key):
         return self.complex[key]
 
@@ -28,7 +29,8 @@ class Complex:
 
     def specialize(self, x_n, x_s):
         """
-        Zwraca listę (zbiór)  maksymalnie ogólnych kompleksów k' takich, że k' jest bardziej szczegółowe od self.complex,
+        Zwraca listę (zbiór)  maksymalnie ogólnych kompleksów k' takich, że k' jest bardziej szczegółowe
+        od self.complex,
         k' nie pokrywa x_n, ale pokrywa x_s
         """
         specialized_complexes = []
@@ -39,7 +41,7 @@ class Complex:
                 specialized_complexes.append(copy.deepcopy(specialized_complex))
         return specialized_complexes
 
-    def isSpecialized(self, k_prim):
+    def is_specialized(self, k_prim):
         """
         Sprawdza, czy self.complex jest bardziej szczegółowe od k_prim.
         """

@@ -100,7 +100,7 @@ class AQ:
         for k in self.G:
             for k_prim in self.G:
                 if k != k_prim:
-                    if k.isSpecialized(k_prim):
+                    if k.is_specialized(k_prim):
                         K_to_remove.add(k)
         for k in K_to_remove:
             self.G.remove(k)

@@ -1,6 +1,7 @@
 import csv
 import copy
 
+
 class DataSet:
     def __init__(self, csv_path):
         """
@@ -11,11 +12,12 @@ class DataSet:
         with open(csv_path) as csv_file:
             spamreader = csv.reader(csv_file, delimiter=',')
             for row in spamreader:
-                attributes = [row[i] for i in range(0, len(row)-1)]
+                attributes = [row[i] for i in range(0, len(row) - 1)]
                 self.dataSet.append({"attributes": copy.deepcopy(attributes), "class": row[-1]})
+
     def __getitem__(self, key):
         return self.dataSet[key]
-    
+
     def __len__(self):
         return len(self.dataSet)
 

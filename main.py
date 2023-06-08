@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     valSplit = 0.15
     trainSplit = 0.8
-    nexecutions = 100
+    nexecutions = 1
 
     # podział zbioru na treningowy/walidacyjny i testowy
     ds = DataSet(dataset)
