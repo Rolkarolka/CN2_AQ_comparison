@@ -3,6 +3,7 @@ import copy
 
 from Complex import Complex
 
+
 class AQ:
     def __init__(self, T, m):
         """
@@ -16,68 +17,66 @@ class AQ:
         """
         self.m = m
         self.R = T
-        allAttributes = self._getAllAttributes()
-        self.G = [Complex(allAttributes)]
+        all_attributes = self._get_all_attributes()
+        self.G = [Complex(all_attributes)]
         self.x_s = random.choice(self.R)
-        self.R_1, self.R_0 = self._getSubsets(self.R)
+        self.R_1, self.r_0 = self._get_subsets(self.R)
         self.bestV = -1
-        self.bestComplex = Complex(allAttributes)
+        self.bestComplex = Complex(all_attributes)
 
-    def _getAllAttributes(self):
+    def _get_all_attributes(self):
         """
         Wyznacza wszystkie możliwe wartości atrybutu na potrzeby stworzenia pierwszego kompleksu uniwersalnego
         """
-        allAttributes = [set() for _ in range(0, len(self.R[0]["attributes"]))]
+        all_attributes = [set() for _ in range(0, len(self.R[0]["attributes"]))]
         for example in self.R:
             for i in range(0, len(example["attributes"])):
-                allAttributes[i].add(copy.deepcopy(example["attributes"][i]))
-        return allAttributes
+                all_attributes[i].add(copy.deepcopy(example["attributes"][i]))
+        return all_attributes
 
-
-    def _getSubsets(self, R):
+    def _get_subsets(self, R):
         """
         Dzieli zbiór przykładów niepokrytych na dwa podzbiory w zależności od klasy ziarna
         """
-        R_0 = []
-        R_1 = []
+        r_0 = []
+        r_1 = []
         for example in R:
             if example["class"] == self.x_s["class"]:
-                R_1.append(copy.deepcopy(example))
+                r_1.append(copy.deepcopy(example))
             else:
-                R_0.append(copy.deepcopy(example))
-        return R_1, R_0
+                r_0.append(copy.deepcopy(example))
+        return r_1, r_0
 
     def getHighestQualityComplex(self):
         """
         Główna pętla algorytmu. Wyznacza najlepszej jakości regułę decyzją w oparciu o dostarczony zbiór danych.
         """
-        R_0_G = self._filterSubset(self.R_0)
-        while len(R_0_G) != 0:
-            x_n = random.choice(R_0_G)
+        r_0_g = self._filter_subset(self.r_0)
+        while len(r_0_g) != 0:
+            x_n = random.choice(r_0_g)
             self._specialization(x_n)
-            self._createMaxGeneralG()
-            self.G = self._getMaxQualityComplexes(self.m)
-            R_0_G = self._filterSubset(self.R_0)
-        maxQualityComplexes = self._getMaxQualityComplexes(1)
-        if maxQualityComplexes == []:
+            self._create_max_general_g()
+            self.G = self._get_max_quality_complexes(self.m)
+            r_0_g = self._filter_subset(self.r_0)
+        max_quality_complexes = self._get_max_quality_complexes(1)
+        if not max_quality_complexes:
             print("Brak kompleksów w zbiorze")
             return None
         else:
-            return maxQualityComplexes[0]
+            return max_quality_complexes[0]
 
-
-    def _filterSubset(self, set):
+    def _filter_subset(self, set):
         """
         Filtruje dany zbiór i zwraca tylko te przykłady, które spełniają co najmniej jeden kompleks ze zbioru G.
         Używany do wyznaczenia zbioru R_0_G, którego długość stanowi kryterium zatrzymania.
         """
-        filtredSubset = []
+        filtred_subset = []
         for example in set:
             for complex in self.G:
                 if complex.check(example["attributes"]):
-                    filtredSubset.append(example)
+                    filtred_subset.append(example)
                     break
-        return filtredSubset
+        return filtred_subset
 
     def _specialization(self, x_n):
         """
@@ -92,7 +91,7 @@ class AQ:
             self.G.remove(k)
             self.G += k.specialize(x_n, self.x_s)
 
-    def _createMaxGeneralG(self):
+    def _create_max_general_g(self):
         """
         G := G − {k ∈ G | (∃k' ∈ G) k' jest bardziej ogólne od k}
         """
@@ -105,12 +104,12 @@ class AQ:
         for k in K_to_remove:
             self.G.remove(k)
 
-    def _getErrorMeasures(self, complex, dataset):
+    def _get_error_measures(self, complex, dataset):
         """
         Liczy miary macierzy pomyłek dla podanego kompleksu
         miary to: dokładnosć, precyzja, swoistość oraz czułość.
         """
-        P, N = self._getSubsets(dataset)
+        P, N = self._get_subsets(dataset)
 
         tp = 0
         tn = 0
@@ -134,9 +133,9 @@ class AQ:
         specificity = tn / len(N)
         sensitivity = tp / len(P)
         return accuracy, precision, specificity, sensitivity
-    
-    def getBestComplexWithMeasures(self, dataset):
-        acc, prec, spec, sens = self._getErrorMeasures(self.bestComplex, dataset)
+
+    def get_best_complex_with_measures(self, dataset):
+        acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
         print("Dokładność: ", acc)
         print("Precyzja: ", prec)
         print("Swoistość: ", spec)
@@ -153,18 +152,18 @@ class AQ:
         for example in self.R_1:
             if complex.check(example["attributes"]):
                 v += 1
-        for example in self.R_0:
+        for example in self.r_0:
             if not complex.check(example["attributes"]):
                 v += 1
-        
+
         if v > self.bestV:
             self.bestV = v
             self.bestComplex = complex
 
         print("Dokładność: ", v / len(self.R))
         return v
-        
-    def _getMaxQualityComplexes(self, m):
+
+    def _get_max_quality_complexes(self, m):
         """
         G := Arg^m max_k∈G v_R(1),R(0) (k);
         """

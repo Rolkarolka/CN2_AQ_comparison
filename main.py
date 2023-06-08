@@ -32,7 +32,7 @@ if __name__ == "__main__":
         else:
             algorithm = CN2()
         print(algorithm.getHighestQualityComplex())
-        bestComplex, acc, prec, spec, sens = algorithm.getBestComplexWithMeasures(dataset=test_dataset)
+        bestComplex, acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
         if prec:
             precision += prec
