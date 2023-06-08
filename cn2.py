@@ -9,7 +9,7 @@ class CN2:
         self.min_significance = min_significance
         self.max_size_star = max_size_star
 
-    def get_highest_quality_complex(self):
+    def process(self):
         rules = []
         classified_examples = copy.deepcopy(self.dataset)
         best_cpx = ()

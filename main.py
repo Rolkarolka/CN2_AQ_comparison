@@ -33,7 +33,7 @@ if __name__ == "__main__":
             algorithm = AQ(T=train_dataset, m=m)
         else:
             algorithm = CN2(dataset=train_dataset)
-        print(algorithm.get_highest_quality_complex())
+        print(algorithm.process())
         bestComplex, acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
         accuracy += acc
         if prec:

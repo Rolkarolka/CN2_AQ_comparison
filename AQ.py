@@ -47,7 +47,7 @@ class AQ:
                 r_0.append(copy.deepcopy(example))
         return r_1, r_0
 
-    def get_highest_quality_complex(self):
+    def process(self):
         """
         Główna pętla algorytmu. Wyznacza najlepszej jakości regułę decyzją w oparciu o dostarczony zbiór danych.
         """
@@ -63,7 +63,7 @@ class AQ:
             print("Brak kompleksów w zbiorze")
             return None
         else:
-            return max_quality_complexes[0]
+            return max_quality_complexes
 
     def _filter_subset(self, set):
         """
