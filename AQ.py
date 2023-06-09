@@ -23,6 +23,7 @@ class AQ:
         self.R_1, self.r_0 = self._get_subsets(self.R)
         self.bestV = -1
         self.bestComplex = Complex(all_attributes)
+        self.process()
 
     def _get_all_attributes(self):
         """

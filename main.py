@@ -30,26 +30,24 @@ if __name__ == "__main__":
     train_dataset = temp_ds[:length_train]
     test_dataset = temp_ds[length_train:]
 
-    nprecisions = 0
     accuracy = 0
     precision = 0
-    specificity = 0
-    sensitivity = 0
+    recall = 0
+    f1 = 0
+
     for _ in range(nexecutions):
         if model == "AQ":
             algorithm = AQ(T=train_dataset, m=m)
-            rules = algorithm.process()
+            # rules = algorithm.process()
         else:
             algorithm = CN2(dataset=train_dataset)
-            rules = algorithm.process() # TODO zapisywanie do pliku
-            format_rules(rules)
-        acc, prec, spec, sens = algorithm.get_best_complex_with_measures(dataset=test_dataset)
+            # rules = algorithm.process() # TODO zapisywanie do pliku
+            # format_rules(rules)
+        acc, prec, rec, f1 = algorithm.evaluate(test_dataset)
         accuracy += acc
-        if prec:
-            precision += prec
-            nprecisions += 1
-        specificity += spec
-        sensitivity += sens
+        precision += prec
+        recall += rec
+        f1 += f1
 
     print("Model: ", model)
     print("Zbiór danych: ", dataset[11:])
@@ -57,6 +55,6 @@ if __name__ == "__main__":
         print("Część jaką stanowi zbior walidacyjny: ", valSplit)
     print("Srednie miary z ", nexecutions, " wykonań algorytmu.")
     print("Dokładność: ", accuracy / nexecutions)
-    print("Precyzja: ", precision / nprecisions)
-    print("Swoistość: ", specificity / nexecutions)
-    print("Czułość: ", sensitivity / nexecutions)
+    print("Precyzja: ", precision / nexecutions)
+    print("Czułość: ", recall / nexecutions)
+    print("F1: ", f1 / nexecutions)
