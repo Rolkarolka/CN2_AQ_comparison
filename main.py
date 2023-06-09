@@ -33,7 +33,7 @@ if __name__ == "__main__":
     accuracy = 0
     precision = 0
     recall = 0
-    f1 = 0
+    f1_score = 0
 
     for _ in range(nexecutions):
         if model == "AQ":
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         accuracy += acc
         precision += prec
         recall += rec
-        f1 += f1
+        f1_score += f1
 
     print("Model: ", model)
     print("Zbiór danych: ", dataset[11:])
