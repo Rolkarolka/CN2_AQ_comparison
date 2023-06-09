@@ -40,9 +40,9 @@ class UserInterface():
         experiment.split_set()
         if(self.model == 'AQ'):
             experiment.set_AQ(self.n_best_complexes)
-        accuracy, precision, specificity, sensitivity, delta_time = experiment.conduct()
+        accuracy, precision, specificity, sensitivity, f1, delta_time = experiment.conduct()
 
-        self._print_results(accuracy, precision, specificity, sensitivity, delta_time)
+        self._print_results(accuracy, precision, specificity, sensitivity, f1, delta_time)
 
     def _print_intro(self):
         print()
@@ -106,11 +106,12 @@ class UserInterface():
         self.n_best_complexes = value if value > 0 else self.n_best_complexes
         print(f'Number of best complexes: {self.n_best_complexes}')
 
-    def _print_results(self, accuracy, precision, specificity, sensitivity, delta_time):
+    def _print_results(self, accuracy, precision, specificity, sensitivity, f1, delta_time):
         print(f'Accuracy: {accuracy}')
         print(f'Precision: {precision}')
         print(f'Specificity: {specificity}')
         print(f'Sensivity: {sensitivity}')
+        print(f'F1: {f1}')
         print(f'Time: {delta_time}')
 
     def _input_attributes_scaling(self):

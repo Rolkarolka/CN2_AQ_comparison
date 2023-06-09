@@ -49,8 +49,15 @@ class Experiment():
             specificity += spec
             sensitivity += sens
 
-        return accuracy / self.n_executions, \
-               precision / nprecisions, \
-               specificity / self.n_executions, \
-               sensitivity / self.n_executions, \
+        accuracy /= self.n_executions
+        precision /= nprecisions
+        specificity /= self.n_executions
+        sensitivity /= self.n_executions
+        f1 = 2 * (precision * sensitivity) / (precision + sensitivity)
+
+        return accuracy, \
+               precision, \
+               specificity, \
+               sensitivity, \
+               f1, \
                timer() - time_start
