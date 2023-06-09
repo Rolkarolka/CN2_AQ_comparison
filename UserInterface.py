@@ -18,39 +18,39 @@ class UserInterface():
     ]
     model = "AQ"
 
-    testSetSize = 0.15
-    nExecutions = 1
-    nBestComplexes = 10
+    test_set_size = 0.15
+    n_executions = 1
+    n_best_complexes = 10
 
-    attributesScaling = 1
-    examplesScaling = 1
+    attributes_scaling = 1
+    examples_scaling = 1
 
     def __init__(self):
-        self._printIntro()
-        self._inputDataset()
-        self._inputModel()
-        self._inputTestSetSize()
-        self._inputNExecutions()
-        self._inputAttributesScaling()
-        self._inputExamplesScaling()
+        self._print_intro()
+        self._input_dataset()
+        self._input_model()
+        self._input_test_set_size()
+        self._input_n_executions()
+        self._input_attributes_scaling()
+        self._input_examples_scaling()
         if(self.model == "AQ"):
-            self._inputNBestComplexes()
+            self._input_n_best_complexes()
         
-        experiment = Experiment(self.dataset, self.testSetSize, self.nExecutions, self.attributesScaling, self.examplesScaling)
-        experiment.splitSet()
+        experiment = Experiment(self.dataset, self.test_set_size, self.n_executions, self.attributes_scaling, self.examples_scaling)
+        experiment.split_set()
         if(self.model == 'AQ'):
-            experiment.setAQ(self.nBestComplexes)
+            experiment.set_AQ(self.n_best_complexes)
         accuracy, precision, specificity, sensitivity, delta_time = experiment.conduct()
 
-        self._printResults(accuracy, precision, specificity, sensitivity, delta_time)
+        self._print_results(accuracy, precision, specificity, sensitivity, delta_time)
 
-    def _printIntro(self):
+    def _print_intro(self):
         print()
         print("******************************")
         print("AQ & CN2 comparison")
         print("******************************")
 
-    def _inputDataset(self):
+    def _input_dataset(self):
         print()
         print(f'Datasets:')
         for idx, set in enumerate(self.datasets):
@@ -63,7 +63,7 @@ class UserInterface():
         self.dataset = self.datasets[datasetIdx] if datasetIdx >= 0 and datasetIdx < len(self.datasets) else self.dataset
         print(f'Dataset: {self.dataset}')
 
-    def _inputModel(self):
+    def _input_model(self):
         print()
         print(f'Models:')
         for idx, model in enumerate(self.models):
@@ -76,59 +76,59 @@ class UserInterface():
         self.model = self.models[modelIdx] if modelIdx >= 0 and modelIdx < len(self.models) else self.model
         print(f'Model: {self.model}')
 
-    def _inputTestSetSize(self):
+    def _input_test_set_size(self):
         print()
-        value = self.testSetSize
+        value = self.test_set_size
         try:
-            value = float(input(f'Test set size [{self.testSetSize}]: '))
+            value = float(input(f'Test set size [{self.test_set_size}]: '))
         except(ValueError):
             pass
-        self.testSetSize = value if value > 0 and value < 1 else self.testSetSize
-        print(f'Test set size: {self.testSetSize}')
+        self.test_set_size = value if value > 0 and value < 1 else self.test_set_size
+        print(f'Test set size: {self.test_set_size}')
 
-    def _inputNExecutions(self):
+    def _input_n_executions(self):
         print()
-        value = self.nExecutions
+        value = self.n_executions
         try:
-            value = int(input(f'Number of executions: [{self.nExecutions}]: '))
+            value = int(input(f'Number of executions: [{self.n_executions}]: '))
         except(ValueError):
             pass
-        self.nExecutions = value if value > 0 else self.nExecutions
-        print(f'Number of executions: {self.nExecutions}')
+        self.n_executions = value if value > 0 else self.n_executions
+        print(f'Number of executions: {self.n_executions}')
 
-    def _inputNBestComplexes(self):
+    def _input_n_best_complexes(self):
         print()
-        value = self.nBestComplexes
+        value = self.n_best_complexes
         try:
-            value = int(input(f'Number of best complexes: [{self.nBestComplexes}]: '))
+            value = int(input(f'Number of best complexes: [{self.n_best_complexes}]: '))
         except(ValueError):
             pass
-        self.nBestComplexes = value if value > 0 else self.nBestComplexes
-        print(f'Number of best complexes: {self.nBestComplexes}')
+        self.n_best_complexes = value if value > 0 else self.n_best_complexes
+        print(f'Number of best complexes: {self.n_best_complexes}')
 
-    def _printResults(self, accuracy, precision, specificity, sensitivity, delta_time):
+    def _print_results(self, accuracy, precision, specificity, sensitivity, delta_time):
         print(f'Accuracy: {accuracy}')
         print(f'Precision: {precision}')
         print(f'Specificity: {specificity}')
         print(f'Sensivity: {sensitivity}')
         print(f'Time: {delta_time}')
 
-    def _inputAttributesScaling(self):
+    def _input_attributes_scaling(self):
         print()
-        value = self.attributesScaling
+        value = self.attributes_scaling
         try:
-            value = int(input(f'Attributes scaling: [{self.attributesScaling}]: '))
+            value = int(input(f'Attributes scaling: [{self.attributes_scaling}]: '))
         except(ValueError):
             pass
-        self.attributesScaling = value if value > 0 else self.attributesScaling
-        print(f'Attributes scaling: {self.attributesScaling}')
+        self.attributes_scaling = value if value > 0 else self.attributes_scaling
+        print(f'Attributes scaling: {self.attributes_scaling}')
     
-    def _inputExamplesScaling(self):
+    def _input_examples_scaling(self):
         print()
-        value = self.examplesScaling
+        value = self.examples_scaling
         try:
-            value = int(input(f'Examples scaling: [{self.examplesScaling}]: '))
+            value = int(input(f'Examples scaling: [{self.examples_scaling}]: '))
         except(ValueError):
             pass
-        self.examplesScaling = value if value > 0 else self.examplesScaling
-        print(f'Examples scaling: {self.examplesScaling}')
+        self.examples_scaling = value if value > 0 else self.examples_scaling
+        print(f'Examples scaling: {self.examples_scaling}')

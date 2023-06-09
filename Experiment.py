@@ -8,28 +8,28 @@ from DataSet import DataSet
 
 
 class Experiment():
-    def __init__(self, dataset, testSetSize, nExecutions, attributesScaling, examplesScaling):
+    def __init__(self, dataset, test_set_size, n_executions, attributes_scaling, examples_scaling):
         self.dataset = DataSet(dataset)
-        self.testSetSize = testSetSize
-        self.nExecutions = nExecutions
-        self.attributesScaling = attributesScaling
-        self.examplesScaling = examplesScaling
+        self.test_set_size = test_set_size
+        self.n_executions = n_executions
+        self.attributes_scaling = attributes_scaling
+        self.examples_scaling = examples_scaling
     
-    def scaleSet(self):
-        self.dataset.scaleAttributes(self.attributesScaling)
-        self.dataset.scaleExamples(self.examplesScaling)
+    def scale_set(self):
+        self.dataset.scale_attributes(self.attributes_scaling)
+        self.dataset.scale_examples(self.examples_scaling)
 
-    def splitSet(self):
+    def split_set(self):
         temp_ds = copy.deepcopy(self.dataset)
         random.shuffle(temp_ds)
         length = len(temp_ds)
-        length_train = round((1 - self.testSetSize) * length)
+        length_train = round((1 - self.test_set_size) * length)
 
         self.train_dataset = temp_ds[:length_train]
         self.test_dataset = temp_ds[length_train:]
 
-    def setAQ(self, nBestComplexes):
-        self.algorithm = AQ(T = self.train_dataset, m = nBestComplexes)
+    def set_AQ(self, n_best_complexes):
+        self.algorithm = AQ(T = self.train_dataset, m = n_best_complexes)
 
     def conduct(self):
         nprecisions = 0
@@ -39,7 +39,7 @@ class Experiment():
         sensitivity = 0
         time_start = timer()
 
-        for _ in range(self.nExecutions):
+        for _ in range(self.n_executions):
             self.algorithm.getHighestQualityComplex()
             bestComplex, acc, prec, spec, sens = self.algorithm.get_best_complex_with_measures(dataset=self.test_dataset)
             accuracy += acc
@@ -49,8 +49,8 @@ class Experiment():
             specificity += spec
             sensitivity += sens
 
-        return accuracy / self.nExecutions, \
+        return accuracy / self.n_executions, \
                precision / nprecisions, \
-               specificity / self.nExecutions, \
-               sensitivity / self.nExecutions, \
+               specificity / self.n_executions, \
+               sensitivity / self.n_executions, \
                timer() - time_start
