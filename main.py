@@ -5,11 +5,11 @@ import random
 import copy
 
 
-def format_rules(rules):
-    for rule, common_class in rules:
-        rule_str = str(list(rule))
-        print(f"Rule: {rule_str:50} Class: {common_class[0]:10} Covered: {common_class[1]}")
-
+# def format_rules(rules):
+#     for rule, common_class in rules:
+#         rule_str = str(list(rule))
+#         print(f"Rule: {rule_str:50} Class: {common_class[0]:10} Covered: {common_class[1]}")
+#
 
 if __name__ == "__main__":
     dataset = "./datasets/car.data"
@@ -41,8 +41,6 @@ if __name__ == "__main__":
             # rules = algorithm.process()
         else:
             algorithm = CN2(dataset=train_dataset)
-            # rules = algorithm.process() # TODO zapisywanie do pliku
-            # format_rules(rules)
         acc, prec, rec, f1 = algorithm.evaluate(test_dataset)
         accuracy += acc
         precision += prec
@@ -57,4 +55,4 @@ if __name__ == "__main__":
     print("Dokładność: ", accuracy / nexecutions)
     print("Precyzja: ", precision / nexecutions)
     print("Czułość: ", recall / nexecutions)
-    print("F1: ", f1 / nexecutions)
+    print("F1: ", f1_score / nexecutions)
