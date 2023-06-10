@@ -21,6 +21,8 @@ class UserInterface():
     test_set_size = 0.15
     n_executions = 1
     n_best_complexes = 10
+    min_significance = 0.4
+    max_size_star = 3
 
     attributes_scaling = 1
     examples_scaling = 1
@@ -35,6 +37,9 @@ class UserInterface():
         self._input_examples_scaling()
         if(self.model == "AQ"):
             self._input_n_best_complexes()
+        elif(self.model == "CN2"):
+            self._input_min_significance()
+            self._input_max_size_star()
         
         experiment = Experiment(self.dataset, self.test_set_size, self.n_executions, self.attributes_scaling, self.examples_scaling)
         experiment.split_set()
@@ -135,3 +140,23 @@ class UserInterface():
             pass
         self.examples_scaling = value if value > 0 else self.examples_scaling
         print(f'Examples scaling: {self.examples_scaling}')
+
+    def _input_min_significance(self):
+        print()
+        value = self.min_significance
+        try:
+            value = int(input(f'Min significance: [{self.min_significance}]: '))
+        except(ValueError):
+            pass
+        self.min_significance = value if value > 0 else self.min_significance
+        print(f'Min significance: {self.min_significance}')
+
+    def _input_max_size_star(self):
+        print()
+        value = self.max_size_star
+        try:
+            value = int(input(f'Max size star: [{self.max_size_star}]: '))
+        except(ValueError):
+            pass
+        self.max_size_star = value if value > 0 else self.max_size_star
+        print(f'Max size star: {self.max_size_star}')
