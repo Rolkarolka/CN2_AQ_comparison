@@ -138,6 +138,9 @@ class AQ:
     def get_best_complex_with_measures(self, dataset):
         acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
         return self.bestComplex, acc, prec, spec, sens
+    
+    def evaluate(self, dataset):
+        return self._get_error_measures(self.bestComplex, dataset)
 
     def _v(self, complex):
         """

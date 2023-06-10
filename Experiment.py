@@ -31,6 +31,9 @@ class Experiment():
     def set_AQ(self, n_best_complexes):
         self.algorithm = AQ(T = self.train_dataset, m = n_best_complexes)
 
+    def set_CN2(self):
+        self.algorithm = CN2(dataset = self.train_dataset)
+
     def conduct(self):
         nprecisions = 0
         accuracy = 0
@@ -41,7 +44,7 @@ class Experiment():
 
         for _ in range(self.n_executions):
             self.algorithm.process()
-            bestComplex, acc, prec, spec, sens = self.algorithm.get_best_complex_with_measures(dataset=self.test_dataset)
+            acc, prec, spec, sens = self.algorithm.evaluate(self.test_dataset)
             accuracy += acc
             if prec:
                 precision += prec

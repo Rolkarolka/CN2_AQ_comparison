@@ -40,6 +40,8 @@ class UserInterface():
         experiment.split_set()
         if(self.model == 'AQ'):
             experiment.set_AQ(self.n_best_complexes)
+        elif(self.model == 'CN2'):
+            experiment.set_CN2()
         accuracy, precision, specificity, sensitivity, f1, delta_time = experiment.conduct()
 
         self._print_results(accuracy, precision, specificity, sensitivity, f1, delta_time)
