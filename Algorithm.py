@@ -1,6 +1,6 @@
 import copy
 
-class Algorythm:
+class Algorithm:
     def __init__(self):
         self.classes = []
         self.rules = []

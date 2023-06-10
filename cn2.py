@@ -1,10 +1,10 @@
 import copy
 import numpy as np
 
-from Algorythm import Algorythm
+from Algorithm import Algorithm
 
 
-class CN2(Algorythm):
+class CN2(Algorithm):
     def __init__(self, dataset, min_significance=0.4, max_size_star=3):
         super().__init__()
         self.dataset = dataset
