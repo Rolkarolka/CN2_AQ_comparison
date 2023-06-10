@@ -33,3 +33,10 @@ class DataSet:
 
     def __str__(self):
         return str(self.dataSet)
+
+    def scale_attributes(self, factor):
+        for example in self.dataSet:
+            example['attributes'] = example['attributes'] * factor
+    
+    def scale_examples(self, factor):
+        self.dataSet = self.dataSet * factor

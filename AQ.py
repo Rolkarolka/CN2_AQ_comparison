@@ -61,7 +61,7 @@ class AQ:
             r_0_g = self._filter_subset(self.r_0)
         max_quality_complexes = self._get_max_quality_complexes(1)
         if not max_quality_complexes:
-            print("Brak kompleksów w zbiorze")
+            print("No complexes in the set")
             return None
         else:
             return max_quality_complexes
@@ -137,12 +137,7 @@ class AQ:
 
     def get_best_complex_with_measures(self, dataset):
         acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
-        print("Dokładność: ", acc)
-        print("Precyzja: ", prec)
-        print("Swoistość: ", spec)
-        print("Czułość: ", sens)
-        return acc, prec, spec, sens
-    # TODO metryki dla klasyfikacji wieloklasowej
+        return self.bestComplex, acc, prec, spec, sens
 
     def _v(self, complex):
         """
@@ -177,5 +172,4 @@ class AQ:
                     max_quality_complex = complex
             G.append(copy.deepcopy(max_quality_complex))
             quality_G.remove((max_quality_complex, max_quality))
-        print()
         return G
