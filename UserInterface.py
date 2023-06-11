@@ -1,4 +1,5 @@
 import datetime
+import os.path
 
 from Experiment import Experiment
 
@@ -20,6 +21,7 @@ class UserInterface():
         "CN2"
     ]
     model = "AQ"
+    output_dir = "output"
 
     test_set_size = 0.15
     n_executions = 1
@@ -168,5 +170,9 @@ class UserInterface():
 
     def _save_output(self, prefix, output):
         file_name = prefix + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + '.txt'
-        with open(file_name, "w") as plik:
-            plik.write(output)
+        path = os.path.join(os.getcwd(), self.output_dir)
+        path_exist = os.path.exists(path)
+        if not path_exist:
+            os.makedirs(path)
+        with open(os.path.join(path, file_name), "w") as file:
+            file.write(output)

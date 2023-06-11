@@ -94,7 +94,6 @@ class CN2(Algorithm):
         return new_star
 
     def _get_all_attributes(self):
-        # TODO komentarze o funkcjach
         possible_values = [set() for _ in range(len(self.dataset[0]['attributes']))]
         for example in self.dataset:
             for i, attr in enumerate(example["attributes"]):
@@ -111,4 +110,7 @@ class CN2(Algorithm):
         return most_common
 
     def get_output(self):
-        return self.rules
+        formatted_output = ""
+        for rule, (common_class, _) in self.rules:
+            formatted_output += f"Rule: {str(list(rule)):50} Class: {common_class:10}\n"
+        return formatted_output

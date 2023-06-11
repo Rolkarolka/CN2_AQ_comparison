@@ -111,54 +111,21 @@ class AQ(Algorithm):
         for k in K_to_remove:
             self.G.remove(k)
 
-    def _get_error_measures(self, complex, dataset):
-        """
-        Liczy miary macierzy pomyłek dla podanego kompleksu
-        miary to: dokładnosć, precyzja, swoistość oraz czułość.
-        """
-        P, N = self._get_subsets(dataset)
-
-        tp = 0
-        tn = 0
-        fp = 0
-        fn = 0
-        for example in P:
-            if complex.check(example["attributes"]):
-                tp += 1
-            else:
-                fn += 1
-        for example in N:
-            if not complex.check(example["attributes"]):
-                tn += 1
-            else:
-                fp += 1
-        accuracy = (tp + tn) / len(dataset)
-        if tp + fp == 0:
-            precision = None
-        else:
-            precision = tp / (tp + fp)
-        specificity = tn / len(N)
-        sensitivity = tp / len(P)
-        return accuracy, precision, specificity, sensitivity
-
-    def get_best_complex_with_measures(self, dataset):
-        acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
-        return self.bestComplex, acc, prec, spec, sens
-    
     def get_output(self):
-        return {cl: str(com[0]) for cl, com in self.max_quality_complexes.items()}
-    
+        formatted_output = ""
+        for cl, com in self.max_quality_complexes.items():
+            formatted_output += f"Rule: {str(com[0]):150} Class: {str(cl):10}\n"
+        return formatted_output
+
     def _get_confusion_matrix(self, classified_examples):
+        """
+         Liczy macierzy pomyłek dla podanego kompleksu
+         """
         confusion_matrix = {key: {cls: 0 for cls in self.classes} for key in self.classes}
         for common_class, complex in self.max_quality_complexes.items():
             for example in classified_examples:
                 if complex[0].check(example["attributes"]):
                     confusion_matrix[example["class"]][common_class] += 1
-        #for rule, (common_class, _) in self.rules:
-        #    covered_examples = self.get_covered(rule, classified_examples)
-        #    for example in covered_examples:
-        #        confusion_matrix[example["class"]][common_class] += 1
-        #    classified_examples = [element for element in classified_examples if element not in covered_examples]
         return confusion_matrix
 
     def _v(self, complex):

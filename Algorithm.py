@@ -1,5 +1,6 @@
 import copy
 
+
 class Algorithm:
     def __init__(self):
         self.classes = []
@@ -21,19 +22,25 @@ class Algorithm:
     def _get_accuracy(self, confusion_values):
         accuracy = 0
         for _, v in confusion_values.items():
-            accuracy += (v["tp"] + v["tn"]) / (v["tp"] + v["tn"] + v["fp"] + v["fn"])
+            denominator = v["tp"] + v["tn"] + v["fp"] + v["fn"]
+            if denominator != 0:
+                accuracy += (v["tp"] + v["tn"]) / denominator
         return accuracy / len(self.classes)
 
     def _get_macro_avg_precision(self, confusion_values):
         precision = 0
         for _, v in confusion_values.items():
-            precision += v["tp"]/(v["tp"]+v["fp"])
+            denominator = v["tp"] + v["fp"]
+            if denominator != 0:
+                precision += v["tp"] / denominator
         return precision / len(self.classes)
 
     def _get_macro_avg_recall(self, confusion_values):
         recall = 0
         for _, v in confusion_values.items():
-            recall += v["tp"]/(v["tp"]+v["fn"])
+            denominator = (v["tp"] + v["fn"])
+            if denominator != 0:
+                recall += v["tp"] / denominator
         return recall / len(self.classes)
 
     def _get_confusion_matrix(self, classified_examples):
@@ -57,4 +64,3 @@ class Algorithm:
 
     def _get_macro_f1_score(self, macro_avg_precision, macro_avg_recall):
         return (2 * macro_avg_precision * macro_avg_recall) / (macro_avg_recall + macro_avg_precision)
-

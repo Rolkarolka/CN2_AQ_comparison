@@ -14,7 +14,7 @@ class Experiment():
         self.n_executions = n_executions
         self.attributes_scaling = attributes_scaling
         self.examples_scaling = examples_scaling
-    
+
     def scale_set(self):
         self.dataset.scale_attributes(self.attributes_scaling)
         self.dataset.scale_examples(self.examples_scaling)
@@ -29,10 +29,10 @@ class Experiment():
         self.test_dataset = temp_ds[length_train:]
 
     def set_AQ(self, n_best_complexes):
-        self.algorithm = AQ(T = self.train_dataset, m = n_best_complexes)
+        self.algorithm = AQ(T=self.train_dataset, m=n_best_complexes)
 
     def set_CN2(self):
-        self.algorithm = CN2(dataset = self.train_dataset)
+        self.algorithm = CN2(dataset=self.train_dataset)
 
     def conduct(self):
         nprecisions = 0
