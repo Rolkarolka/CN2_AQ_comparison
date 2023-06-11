@@ -145,6 +145,9 @@ class AQ(Algorithm):
         acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
         return self.bestComplex, acc, prec, spec, sens
     
+    def get_output(self):
+        return {cl: str(com[0]) for cl, com in self.max_quality_complexes.items()}
+    
     def _get_confusion_matrix(self, classified_examples):
         confusion_matrix = {key: {cls: 0 for cls in self.classes} for key in self.classes}
         for common_class, complex in self.max_quality_complexes.items():

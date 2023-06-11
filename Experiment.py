@@ -64,3 +64,6 @@ class Experiment():
                sensitivity, \
                f1, \
                timer() - time_start
+
+    def get_output(self):
+        return self.algorithm.get_output()

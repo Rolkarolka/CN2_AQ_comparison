@@ -109,3 +109,6 @@ class CN2(Algorithm):
         covered_classes = self.get_covered_classes(covered_examples)
         most_common = sorted(covered_classes.items(), reverse=True, key=lambda x: x[1])[0]
         return most_common
+
+    def get_output(self):
+        return self.rules

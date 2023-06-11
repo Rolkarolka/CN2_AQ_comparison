@@ -1,4 +1,7 @@
+import datetime
+
 from Experiment import Experiment
+
 
 class UserInterface():
     datasets = [
@@ -48,8 +51,10 @@ class UserInterface():
         elif(self.model == 'CN2'):
             experiment.set_CN2()
         accuracy, precision, specificity, sensitivity, f1, delta_time = experiment.conduct()
+        output = experiment.get_output()
 
         self._print_results(accuracy, precision, specificity, sensitivity, f1, delta_time)
+        self._save_output(self.model, str(output))
 
     def _print_intro(self):
         print()
@@ -160,3 +165,8 @@ class UserInterface():
             pass
         self.max_size_star = value if value > 0 else self.max_size_star
         print(f'Max size star: {self.max_size_star}')
+
+    def _save_output(self, prefix, output):
+        file_name = prefix + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + '.txt'
+        with open(file_name, "w") as plik:
+            plik.write(output)
