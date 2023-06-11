@@ -1,10 +1,11 @@
 import random
 import copy
 
+from Algorithm import Algorithm
 from Complex import Complex
 
 
-class AQ:
+class AQ(Algorithm):
     def __init__(self, T, m):
         """
         T - zbiór wszystkich przykładów
@@ -15,14 +16,12 @@ class AQ:
         self.R_1 - zbiór przykładów ze zbioru przykładów niepokrytych, których klasa jest zgodna z klasą ziarna x_s
         self.R_0 - zbiór przykładów ze zbioru przykładów niepokrytych, których klasa jest niezgodna z klasą ziarna x_s
         """
+        super().__init__()
+        self.classes = set(example["class"] for example in T)
+
         self.m = m
         self.R = T
-        all_attributes = self._get_all_attributes()
-        self.G = [Complex(all_attributes)]
-        self.x_s = random.choice(self.R)
-        self.R_1, self.r_0 = self._get_subsets(self.R)
-        self.bestV = -1
-        self.bestComplex = Complex(all_attributes)
+        self.max_quality_complexes = {}
         self.process()
 
     def _get_all_attributes(self):
@@ -52,19 +51,26 @@ class AQ:
         """
         Główna pętla algorytmu. Wyznacza najlepszej jakości regułę decyzją w oparciu o dostarczony zbiór danych.
         """
-        r_0_g = self._filter_subset(self.r_0)
-        while len(r_0_g) != 0:
-            x_n = random.choice(r_0_g)
-            self._specialization(x_n)
-            self._create_max_general_g()
-            self.G = self._get_max_quality_complexes(self.m)
+        for c in self.classes:
+            self.x_s = random.choice([x for x in self.R if x['class'] == c])
+            all_attributes = self._get_all_attributes()
+            self.G = [Complex(all_attributes)]
+            self.R_1, self.r_0 = self._get_subsets(self.R)
+            self.bestV = -1
+            self.bestComplex = Complex(all_attributes)
             r_0_g = self._filter_subset(self.r_0)
-        max_quality_complexes = self._get_max_quality_complexes(1)
-        if not max_quality_complexes:
+            while len(r_0_g) != 0:
+                x_n = random.choice(r_0_g)
+                self._specialization(x_n)
+                self._create_max_general_g()
+                self.G = self._get_max_quality_complexes(self.m)
+                r_0_g = self._filter_subset(self.r_0)
+            self.max_quality_complexes[c] = self._get_max_quality_complexes(1)
+        if not self.max_quality_complexes:
             print("No complexes in the set")
             return None
         else:
-            return max_quality_complexes
+            return self.max_quality_complexes
 
     def _filter_subset(self, set):
         """
@@ -139,8 +145,18 @@ class AQ:
         acc, prec, spec, sens = self._get_error_measures(self.bestComplex, dataset)
         return self.bestComplex, acc, prec, spec, sens
     
-    def evaluate(self, dataset):
-        return self._get_error_measures(self.bestComplex, dataset)
+    def _get_confusion_matrix(self, classified_examples):
+        confusion_matrix = {key: {cls: 0 for cls in self.classes} for key in self.classes}
+        for common_class, complex in self.max_quality_complexes.items():
+            for example in classified_examples:
+                if complex[0].check(example["attributes"]):
+                    confusion_matrix[example["class"]][common_class] += 1
+        #for rule, (common_class, _) in self.rules:
+        #    covered_examples = self.get_covered(rule, classified_examples)
+        #    for example in covered_examples:
+        #        confusion_matrix[example["class"]][common_class] += 1
+        #    classified_examples = [element for element in classified_examples if element not in covered_examples]
+        return confusion_matrix
 
     def _v(self, complex):
         """
