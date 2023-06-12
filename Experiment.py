@@ -35,35 +35,34 @@ class Experiment():
         self.algorithm = CN2(dataset=self.train_dataset)
 
     def conduct(self):
-        nprecisions = 0
         accuracy = 0
         precision = 0
-        specificity = 0
-        sensitivity = 0
-        time_start = timer()
+        recall = 0
+        f1_score = 0
+        times_avg = 0
 
         for _ in range(self.n_executions):
+            time_start = timer()
             self.algorithm.process()
-            acc, prec, spec, sens = self.algorithm.evaluate(self.test_dataset)
+            acc, prec, rec, f1 = self.algorithm.evaluate(self.test_dataset)
             accuracy += acc
-            if prec:
-                precision += prec
-                nprecisions += 1
-            specificity += spec
-            sensitivity += sens
+            precision += prec
+            recall += rec
+            f1_score += f1
+            exec_time = timer() - time_start
+            times_avg += exec_time
 
         accuracy /= self.n_executions
-        precision /= nprecisions
-        specificity /= self.n_executions
-        sensitivity /= self.n_executions
-        f1 = 2 * (precision * sensitivity) / (precision + sensitivity)
+        precision /= self.n_executions
+        recall /= self.n_executions
+        f1_score /= self.n_executions
+        times_avg /= self.n_executions
 
         return accuracy, \
                precision, \
-               specificity, \
-               sensitivity, \
-               f1, \
-               timer() - time_start
+               recall, \
+               f1_score, \
+               times_avg
 
     def get_output(self):
         return self.algorithm.get_output()

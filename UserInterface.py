@@ -24,10 +24,10 @@ class UserInterface():
     output_dir = "output"
 
     test_set_size = 0.15
-    n_executions = 1
+    n_executions = 10
     n_best_complexes = 10
     min_significance = 0.4
-    max_size_star = 3
+    max_size_star = 4
 
     attributes_scaling = 1
     examples_scaling = 1
@@ -40,22 +40,22 @@ class UserInterface():
         self._input_n_executions()
         self._input_attributes_scaling()
         self._input_examples_scaling()
-        if(self.model == "AQ"):
+        if self.model == "AQ":
             self._input_n_best_complexes()
-        elif(self.model == "CN2"):
+        elif self.model == "CN2":
             self._input_min_significance()
             self._input_max_size_star()
         
         experiment = Experiment(self.dataset, self.test_set_size, self.n_executions, self.attributes_scaling, self.examples_scaling)
         experiment.split_set()
-        if(self.model == 'AQ'):
+        if self.model == 'AQ':
             experiment.set_AQ(self.n_best_complexes)
-        elif(self.model == 'CN2'):
+        elif self.model == 'CN2':
             experiment.set_CN2()
-        accuracy, precision, specificity, sensitivity, f1, delta_time = experiment.conduct()
+        accuracy, precision, recall, f1, avg_time = experiment.conduct()
         output = experiment.get_output()
 
-        self._print_results(accuracy, precision, specificity, sensitivity, f1, delta_time)
+        self._print_results(accuracy, precision, recall, f1, avg_time)
         self._save_output(self.model, str(output))
 
     def _print_intro(self):
@@ -74,7 +74,7 @@ class UserInterface():
             datasetIdx = int(input(f'Dataset [{datasetIdx + 1}]: ')) - 1
         except(ValueError):
             pass
-        self.dataset = self.datasets[datasetIdx] if datasetIdx >= 0 and datasetIdx < len(self.datasets) else self.dataset
+        self.dataset = self.datasets[datasetIdx] if 0 <= datasetIdx < len(self.datasets) else self.dataset
         print(f'Dataset: {self.dataset}')
 
     def _input_model(self):
@@ -85,9 +85,9 @@ class UserInterface():
         modelIdx = self.models.index(self.model)
         try:
             modelIdx = int(input(f'Model [{modelIdx + 1}]: ')) - 1
-        except(ValueError):
+        except ValueError:
             pass
-        self.model = self.models[modelIdx] if modelIdx >= 0 and modelIdx < len(self.models) else self.model
+        self.model = self.models[modelIdx] if 0 <= modelIdx < len(self.models) else self.model
         print(f'Model: {self.model}')
 
     def _input_test_set_size(self):
@@ -95,9 +95,9 @@ class UserInterface():
         value = self.test_set_size
         try:
             value = float(input(f'Test set size [{self.test_set_size}]: '))
-        except(ValueError):
+        except ValueError:
             pass
-        self.test_set_size = value if value > 0 and value < 1 else self.test_set_size
+        self.test_set_size = value if 0 < value < 1 else self.test_set_size
         print(f'Test set size: {self.test_set_size}')
 
     def _input_n_executions(self):
@@ -105,7 +105,7 @@ class UserInterface():
         value = self.n_executions
         try:
             value = int(input(f'Number of executions: [{self.n_executions}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.n_executions = value if value > 0 else self.n_executions
         print(f'Number of executions: {self.n_executions}')
@@ -115,25 +115,24 @@ class UserInterface():
         value = self.n_best_complexes
         try:
             value = int(input(f'Number of best complexes: [{self.n_best_complexes}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.n_best_complexes = value if value > 0 else self.n_best_complexes
         print(f'Number of best complexes: {self.n_best_complexes}')
 
-    def _print_results(self, accuracy, precision, specificity, sensitivity, f1, delta_time):
+    def _print_results(self, accuracy, precision, recall, f1, avg_time):
         print(f'Accuracy: {accuracy}')
         print(f'Precision: {precision}')
-        print(f'Specificity: {specificity}')
-        print(f'Sensivity: {sensitivity}')
+        print(f'Recall: {recall}')
         print(f'F1: {f1}')
-        print(f'Time: {delta_time}')
+        print(f'Time: {avg_time}')
 
     def _input_attributes_scaling(self):
         print()
         value = self.attributes_scaling
         try:
             value = int(input(f'Attributes scaling: [{self.attributes_scaling}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.attributes_scaling = value if value > 0 else self.attributes_scaling
         print(f'Attributes scaling: {self.attributes_scaling}')
@@ -143,7 +142,7 @@ class UserInterface():
         value = self.examples_scaling
         try:
             value = int(input(f'Examples scaling: [{self.examples_scaling}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.examples_scaling = value if value > 0 else self.examples_scaling
         print(f'Examples scaling: {self.examples_scaling}')
@@ -153,7 +152,7 @@ class UserInterface():
         value = self.min_significance
         try:
             value = int(input(f'Min significance: [{self.min_significance}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.min_significance = value if value > 0 else self.min_significance
         print(f'Min significance: {self.min_significance}')
@@ -163,7 +162,7 @@ class UserInterface():
         value = self.max_size_star
         try:
             value = int(input(f'Max size star: [{self.max_size_star}]: '))
-        except(ValueError):
+        except ValueError:
             pass
         self.max_size_star = value if value > 0 else self.max_size_star
         print(f'Max size star: {self.max_size_star}')

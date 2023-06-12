@@ -63,4 +63,8 @@ class Algorithm:
         return confusion_values
 
     def _get_macro_f1_score(self, macro_avg_precision, macro_avg_recall):
-        return (2 * macro_avg_precision * macro_avg_recall) / (macro_avg_recall + macro_avg_precision)
+        denominator = (macro_avg_recall + macro_avg_precision)
+        if denominator != 0:
+            return (2 * macro_avg_precision * macro_avg_recall) / denominator
+        else:
+            return 0
