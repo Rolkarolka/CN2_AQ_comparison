@@ -23,7 +23,7 @@ class UserInterface():
     output_dir = "output"
 
     test_set_size = 0.15
-    n_executions = 100
+    n_executions = 5
     n_best_complexes = 10
     min_significance = 0.5
     max_size_star = 5
