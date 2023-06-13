@@ -124,7 +124,7 @@ class AQ(Algorithm):
         confusion_matrix = {key: {cls: 0 for cls in self.classes} for key in self.classes}
         for common_class, complex in self.max_quality_complexes.items():
             for example in classified_examples:
-                if complex[0].check(example["attributes"]):
+                if len(complex) and complex[0].check(example["attributes"]):
                     confusion_matrix[example["class"]][common_class] += 1
         return confusion_matrix
 

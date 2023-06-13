@@ -12,7 +12,6 @@ class UserInterface():
         "./datasets/balloons/yellow-small+adult-stretch.data",
         "./datasets/breast-cancer/breast-cancer.data",
         "./datasets/car-evaluation/car.data",
-        "./datasets/mushroom/agaricus-lepiota.data"
     ]
     dataset = "./datasets/car-evaluation/car.data"
 
@@ -24,10 +23,10 @@ class UserInterface():
     output_dir = "output"
 
     test_set_size = 0.15
-    n_executions = 10
+    n_executions = 100
     n_best_complexes = 10
-    min_significance = 0.4
-    max_size_star = 4
+    min_significance = 0.5
+    max_size_star = 5
 
     attributes_scaling = 1
     examples_scaling = 1
@@ -47,6 +46,7 @@ class UserInterface():
             self._input_max_size_star()
         
         experiment = Experiment(self.dataset, self.test_set_size, self.n_executions, self.attributes_scaling, self.examples_scaling)
+        experiment.scale_set()
         experiment.split_set()
         if self.model == 'AQ':
             experiment.set_AQ(self.n_best_complexes)
@@ -72,7 +72,7 @@ class UserInterface():
         datasetIdx = self.datasets.index(self.dataset)
         try:
             datasetIdx = int(input(f'Dataset [{datasetIdx + 1}]: ')) - 1
-        except(ValueError):
+        except ValueError:
             pass
         self.dataset = self.datasets[datasetIdx] if 0 <= datasetIdx < len(self.datasets) else self.dataset
         print(f'Dataset: {self.dataset}')
@@ -151,7 +151,7 @@ class UserInterface():
         print()
         value = self.min_significance
         try:
-            value = int(input(f'Min significance: [{self.min_significance}]: '))
+            value = float(input(f'Min significance: [{self.min_significance}]: '))
         except ValueError:
             pass
         self.min_significance = value if value > 0 else self.min_significance
